@@ -3,9 +3,12 @@ Multiclass semantic segmentation using DeepLabV3+, which is, in a nutshell, a co
 
 ## Theory
 
-To capture contextual information, DeepLabv3 employs several parallel Atrous Convolution, or Dilated Convolution, at different rates (called Atrous Spatial Pyramid Pooling). Even though rich semantic information is encoded in the last feature map, detailed information related to object boundaries is missing due to the pooling or convolutions with striding operations within the network backbone. DeepLabv3+, extends DeepLabv3 by adding a simple yet effective decoder module to recover the object boundaries.
+**How DeepLab works**: 
+1. Atrous Convolution is also known as convolution with holes, and the idea is to "inflate" the kernel which in turn skips some of the points. Basically, the kernel/filter that is being applied is expanded and then convolved with the image. By this, we can control the resolution of features computed by deep convolutional neural networks and adjust filter’s field-of-view in order to capture multi-scale information.
+2. Atrous Spatial Pyramid Pooling probes the incoming convolutional feature layer with filters at multiple sampling-rates and effective fields of view, thus capturing objects as well as image context at multiple scales. 
+3. Improve the localization of object boundaries by combining the responses at the final DCNN layer with a fully connected Conditional Random Field (CRF).
 
-Atrous Convolution is also known as convolution with holes, and the idea is to "inflate" the kernel which in turn skips some of the points. Basically, the kernel/filter that is being applied is expanded and then convolved with the image. By this, we can control the resolution of features computed by deep convolutional neural networks and adjust filter’s field-of-view in order to capture multi-scale information.
+To capture contextual information, DeepLabv3 employs several parallel Atrous Convolution, or Dilated Convolution, at different rates (called Atrous Spatial Pyramid Pooling). Even though rich semantic information is encoded in the last feature map, detailed information related to object boundaries is missing due to the pooling or convolutions with striding operations within the network backbone. 
 
 The below image is of a standard discrete convolution.
 
@@ -25,6 +28,10 @@ The formula for dilated convolution is:
 
 Where l is known as the dilation rate (widening of kernel), and l=1 equals standard discrete convolution.
 
+**How DeepLabv3 works**:
+DeepLabv3+, extends DeepLabv3 by adding a simple yet effective decoder module to recover the object boundaries. The backbone network is used to extract features from the input image. The ASPP module is then applied to the output of the backbone network to capture multi-scale context information. It consists of multiple parallel atrous convolutional layers with different dilation rates, which allow the network to capture context information at different scales. Finally, the decoder network is used to upsample the output of the ASPP module to the same size as the input image, producing the final semantic segmentation map. 
+
+![image](https://user-images.githubusercontent.com/98682258/229280717-eb1febc8-2021-4fb8-b2ea-ade041417db8.png)
 
 Steps:
   1. This project is done in Google Colab.
